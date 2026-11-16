@@ -9,15 +9,15 @@ The deployable files are already built and committed in **`site/`**; no build to
 | Source | GitHub repo `SD-77-DS/Playora-Web`, branch `main` (or zip/CLI upload) |
 | Framework preset | Other / Static |
 | Install command | *(none)* |
-| Build command | `npm run build` (a no-op) or leave empty |
-| Output directory | `site` |
+| Build command | `npm run build` (copies `site/` to `dist/`) |
+| Output directory | `dist` (Slate default) |
 
 URLs are served from the root of your Slate domain:
 `/`, `/privacy/`, `/data-safety/`, `/content-rating/`, `/audience-and-ads/`, `/permissions/`, `/contact/`.
 
 ### Deploy
 - **From Git:** Catalyst console → Slate → create app → connect GitHub → select the repo → enter the settings above → Deploy.
-- **From CLI:** `npm i -g zcatalyst-cli && catalyst login && catalyst slate:create` and follow the prompts (output directory: `site`).
+- **From CLI:** `npm i -g zcatalyst-cli && catalyst login && catalyst slate:create` and follow the prompts (output directory: `dist`).
 
 Privacy policy URL for Play Console: `https://<your-slate-domain>/privacy/`.
 
