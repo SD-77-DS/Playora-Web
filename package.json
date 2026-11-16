@@ -1,0 +1,10 @@
+{
+  "name": "playora-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playora privacy policy and Play Store declaration pages (static site)",
+  "scripts": {
+    "build": "echo \"Static site: pre-built in ./site, nothing to compile\"",
+    "start": "npx --yes serve site -l 3000"
+  }
+}

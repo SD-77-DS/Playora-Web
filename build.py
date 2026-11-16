@@ -7,7 +7,7 @@ import os, html
 #   SITE_URL   public origin + base path, used for canonical links, robots.txt and sitemap.xml
 BASE = os.environ.get("BASE_PATH", "").rstrip("/")
 OUT = os.environ.get("OUT_DIR", "site")  # "client" for Zoho Catalyst
-SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000").rstrip("/")
+SITE_URL = os.environ.get("SITE_URL", "").rstrip("/")
 
 UPDATED = "November 16, 2026"
 CONTACT = "sasiamrit@gmail.com"
@@ -17,6 +17,7 @@ NAV = [("/", "Home"), ("/privacy/", "Privacy Policy"), ("/data-safety/", "Data S
        ("/permissions/", "Permissions"), ("/contact/", "Contact")]
 
 def layout(path, title, body):
+    CANON = f'<link rel="canonical" href="{SITE_URL}{path}">' if SITE_URL else ""
     links = "".join(f'<a href="{h}"{" class=active" if h == path else ""}>{t}</a>' for h, t in NAV)
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -24,7 +25,7 @@ def layout(path, title, body):
 <title>{html.escape(title)} · Playora</title>
 <meta name="description" content="Playora: a local and network media player. {html.escape(title)}.">
 <link rel="icon" href="/assets/icon.png">
-<link rel="canonical" href="{SITE_URL}{path}">
+{CANON}
 <link rel="stylesheet" href="/assets/style.css">
 </head><body>
 <header><a class="brand" href="/"><img src="/assets/icon.png" alt="" width="36" height="36"> Playora</a>
@@ -182,8 +183,8 @@ for path, (title, body) in pages.items():
     open(os.path.join(d, "index.html"), "w").write(layout(path, title, body))
 open(OUT + "/404.html", "w").write(layout("/404", "Page not found",
     '<h1>Page not found</h1><p>That page does not exist. <a href="/">Back to home</a>.</p>').replace(
-    f'<link rel="canonical" href="{SITE_URL}/404">', '<meta name="robots" content="noindex">'))
-open(OUT + "/robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
-open(OUT + "/sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    f'<link rel="canonical" href="{SITE_URL}/404">', '').replace("</head>", '<meta name="robots" content="noindex"></head>'))
+open(OUT + "/robots.txt", "w").write("User-agent: *\nAllow: /\n" + (f"Sitemap: {SITE_URL}/sitemap.xml\n" if SITE_URL else ""))
+if SITE_URL: open(OUT + "/sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     + "".join(f"<url><loc>{SITE_URL}{p}</loc></url>\n" for p in pages) + "</urlset>\n")
 print("built", len(pages), "pages")
