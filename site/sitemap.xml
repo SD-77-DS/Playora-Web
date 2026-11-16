@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>http://localhost:8000/</loc></url>
+<url><loc>http://localhost:8000/privacy/</loc></url>
+<url><loc>http://localhost:8000/data-safety/</loc></url>
+<url><loc>http://localhost:8000/content-rating/</loc></url>
+<url><loc>http://localhost:8000/audience-and-ads/</loc></url>
+<url><loc>http://localhost:8000/permissions/</loc></url>
+<url><loc>http://localhost:8000/contact/</loc></url>
+</urlset>

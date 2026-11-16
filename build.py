@@ -2,8 +2,15 @@
 """Generates the static Playora site. Each page is served at its own clean path: /privacy/, /data-safety/ ..."""
 import os, html
 
+# Production settings (override via environment in CI):
+#   BASE_PATH  "" for a custom domain / user site, "/Playora-Web" for a GitHub Pages project site
+#   SITE_URL   public origin + base path, used for canonical links, robots.txt and sitemap.xml
+BASE = os.environ.get("BASE_PATH", "").rstrip("/")
+OUT = os.environ.get("OUT_DIR", "site")  # "client" for Zoho Catalyst
+SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000").rstrip("/")
+
 UPDATED = "November 16, 2026"
-CONTACT = "CONTACT_EMAIL_HERE"  # TODO: replace with your public support/privacy email before publishing
+CONTACT = "sasiamrit@gmail.com"
 
 NAV = [("/", "Home"), ("/privacy/", "Privacy Policy"), ("/data-safety/", "Data Safety"),
        ("/content-rating/", "Content Rating"), ("/audience-and-ads/", "Audience & Ads"),
@@ -17,13 +24,14 @@ def layout(path, title, body):
 <title>{html.escape(title)} · Playora</title>
 <meta name="description" content="Playora: a local and network media player. {html.escape(title)}.">
 <link rel="icon" href="/assets/icon.png">
+<link rel="canonical" href="{SITE_URL}{path}">
 <link rel="stylesheet" href="/assets/style.css">
 </head><body>
 <header><a class="brand" href="/"><img src="/assets/icon.png" alt="" width="36" height="36"> Playora</a>
 <nav>{links}</nav></header>
 <main>{body}</main>
 <footer>© 2026 Playora · Last updated {UPDATED}</footer>
-</body></html>"""
+</body></html>""".replace('href="/', f'href="{BASE}/').replace('src="/', f'src="{BASE}/')
 
 def table(rows, head):
     h = "".join(f"<th>{c}</th>" for c in head)
@@ -169,7 +177,13 @@ pages["/contact/"] = ("Contact", f"""
 <p class="muted">Include your Android version and device model for support requests.</p>""")
 
 for path, (title, body) in pages.items():
-    d = os.path.join("site", path.strip("/"))
+    d = os.path.join(OUT, path.strip("/"))
     os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "index.html"), "w").write(layout(path, title, body))
+open(OUT + "/404.html", "w").write(layout("/404", "Page not found",
+    '<h1>Page not found</h1><p>That page does not exist. <a href="/">Back to home</a>.</p>').replace(
+    f'<link rel="canonical" href="{SITE_URL}/404">', '<meta name="robots" content="noindex">'))
+open(OUT + "/robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
+open(OUT + "/sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + "".join(f"<url><loc>{SITE_URL}{p}</loc></url>\n" for p in pages) + "</urlset>\n")
 print("built", len(pages), "pages")

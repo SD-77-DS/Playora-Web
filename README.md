@@ -1,16 +1,24 @@
-# Playora website
+# Playora website (Zoho Catalyst)
 
-Static site for Play Store requirements. Edit `build.py`, then run `python3 build.py` to regenerate `site/`.
+Static site (privacy policy, data safety, content rating, permissions, contact) for the Play Store listing.
 
-| Path | Purpose |
-|---|---|
-| `/` | Home |
-| `/privacy/` | Privacy policy URL for Play Console |
-| `/data-safety/` | Data safety answers |
-| `/content-rating/` | Content rating answers |
-| `/audience-and-ads/` | Target audience and ads declaration |
-| `/permissions/` | Foreground service, media and notification justifications |
-| `/contact/` | Contact |
+## Structure
+- `build.py` – generates the pages (edit content/email here).
+- `site/` – local-dev build (served at `/`).
+- `client/` – Catalyst web client build (served under `/app/`). Contains `client-package.json`.
+- `catalyst.json` – Catalyst project config (client hosting only).
+- `deploy-catalyst.sh` – builds `client/` and deploys it.
 
-**Before publishing:** set `CONTACT` in `build.py` to a real email.
-Preview: `cd site && python3 -m http.server 8000`. Host `site/` on GitHub Pages, Netlify, etc.
+## Local preview
+```
+python3 build.py && cd site && python3 -m http.server 8000
+```
+
+## Deploy to Zoho Catalyst (production)
+1. `npm i -g zcatalyst-cli && catalyst login`
+2. In this folder run `catalyst init` once: choose **Client**, pick/create your Catalyst project, and keep the existing `client` directory.
+3. `SITE_URL=https://<project>-<id>.catalystserverless.com/app ./deploy-catalyst.sh`
+   (use your real URL from the Catalyst console → Web Client Hosting; `SITE_URL` feeds canonical links and the sitemap).
+4. In the Catalyst console, switch the environment from Development to **Production** (Deploy → Production) to publish.
+
+Privacy policy URL for Play Console: `<SITE_URL>/privacy/` (if the host doesn't resolve folder paths, use `<SITE_URL>/privacy/index.html`).
