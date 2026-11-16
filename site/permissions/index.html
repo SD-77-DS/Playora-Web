@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Permissions · Playora</title>
+<meta name="description" content="Playora: a local and network media player. Permissions.">
+<link rel="icon" href="/assets/icon.png">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body>
+<header><a class="brand" href="/"><img src="/assets/icon.png" alt="" width="36" height="36"> Playora</a>
+<nav><a href="/">Home</a><a href="/privacy/">Privacy Policy</a><a href="/data-safety/">Data Safety</a><a href="/content-rating/">Content Rating</a><a href="/audience-and-ads/">Audience & Ads</a><a href="/permissions/" class=active>Permissions</a><a href="/contact/">Contact</a></nav></header>
+<main>
+<h1>Permissions Explained</h1>
+<p class="muted">Justifications for the Play Console declarations. Last updated November 16, 2026</p>
+
+<h2 id="foreground-service">Foreground service: media playback</h2>
+<p><code>FOREGROUND_SERVICE</code> and <code>FOREGROUND_SERVICE_MEDIA_PLAYBACK</code></p>
+<p><b>Why it is essential:</b> Playora's core function is playing audio and video. When you start playback and then minimize the app or lock your phone, Android needs a foreground service of type <code>mediaPlayback</code> to keep playing. Without it, the system would stop playback as soon as the screen turns off.</p>
+<ol><li>Open a video or song in Playora and start playing.</li><li>Minimize the app or lock the phone.</li><li>Playback continues and can be controlled from the notification and lock screen.</li></ol>
+<p>The service runs only while media is playing or paused by the user, and stops when the app is closed with nothing playing. It does nothing else.</p>
+
+<h2 id="media">Photo and video permissions</h2>
+<p><code>READ_MEDIA_VIDEO</code> and <code>READ_MEDIA_AUDIO</code> (Android 13+), and <code>READ_EXTERNAL_STORAGE</code> up to Android 12L</p>
+<p><b>Why it is essential:</b> A media player must show the user's local library so they can pick something to play. Playora cannot offer this using the system photo picker alone, because its job is to browse and play whole libraries of video and music, with folders, albums, artists and queues.</p>
+<ol><li>The user opens Playora and is asked for media access.</li><li>The user grants permission.</li><li>Playora lists the videos and music available on the device.</li><li>The user selects an item and Playora plays it.</li></ol>
+<p>Media is read only on the device and is never uploaded. Playora does not request access to photos or images. It also works without the permission for files opened from other apps or share sheets.</p>
+<div class="note">Google Play restricts broad media permissions. A media player is a relevant core use case, but approval is not guaranteed, so describe this flow clearly in the declaration form.</div>
+
+<h2 id="notifications">Notifications</h2>
+<p><code>POST_NOTIFICATIONS</code></p>
+<p><b>Why:</b> To show the media playback notification, so you can control Playora without opening it:</p>
+<ul><li>Play / Pause</li><li>Next and previous track</li><li>Playback information (title, artist and artwork)</li></ul>
+<p>Playora does not send marketing or promotional notifications.</p>
+
+<h2 id="other">Other permissions</h2>
+<div class="tw"><table><thead><tr><th>Permission</th><th>Purpose</th></tr></thead><tbody><tr><td><code>INTERNET</code>, <code>ACCESS_NETWORK_STATE</code></td><td>Play network streams and links you enter, and detect connectivity.</td></tr><tr><td><code>WAKE_LOCK</code></td><td>Keep playback running while the screen is off.</td></tr></tbody></table></div></main>
+<footer>© 2026 Playora · Last updated November 16, 2026</footer>
+</body></html>
